@@ -1,28 +1,32 @@
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
-import { BrowserModule } from '@angular/platform-browser';
+import { RootComponent } from './app.component';
 
 import routes from './app.routes';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { CompanyDetailsModule } from './companyDetails/companyDetails.module';
+import { PriceGraphModule } from './priceGraph/priceGraph.module';
+import { DataTableForStockModule } from './dataTableForStock/dataTableForStock.module';
+import { HighLowVolumeModule } from './highLowVolume/highLowVolume.module';
 
 
 @NgModule({
   imports: [
     BrowserModule,
-    // Http
-    HttpModule,
-    // Forms
-    FormsModule,
     // Router
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+
+    CompanyDetailsModule,
+    PriceGraphModule,
+    DataTableForStockModule,
+    HighLowVolumeModule
   ],
   declarations: [
-    AppComponent
+    RootComponent
   ],
   bootstrap: [
-    AppComponent
+    RootComponent
   ],
 })
-export class AppModule {}
+export class RootModule {}
