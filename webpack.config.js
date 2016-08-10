@@ -3,7 +3,6 @@ var path = require('path');
 var webpack = require('webpack');
 
 // Webpack Plugins
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -46,7 +45,7 @@ module.exports = function makeWebpackConfig() {
   config.entry = isTest ? {} : {
     'polyfills': './src/polyfills.ts',
     'vendor': './src/vendor.ts',
-    'app': './src/main.ts' // our angular app
+    'app': './src/main.ts'
   };
 
   /**
@@ -82,7 +81,6 @@ module.exports = function makeWebpackConfig() {
    * This handles most of the magic responsible for converting modules
    */
   config.module = {
-    preLoaders: isTest ? [] : [{test: /\.ts$/, loader: 'tslint'}],
     loaders: [
       // Support for .ts files.
       {
@@ -123,7 +121,6 @@ module.exports = function makeWebpackConfig() {
       // todo: change the loader to something that adds a hash to images
       {test: /\.html$/, loader: 'raw'}
     ],
-    postLoaders: [],
     noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/]
   };
 
@@ -159,6 +156,11 @@ module.exports = function makeWebpackConfig() {
       'process.env': {
         ENV: JSON.stringify(ENV)
       }
+    }),
+    
+    new webpack.ProvidePlugin({
+      '$': 'jquery',
+      'jQuery': 'jquery'
     })
   ];
 
@@ -167,7 +169,7 @@ module.exports = function makeWebpackConfig() {
       // Generate common chunks if necessary
       // Reference: https://webpack.github.io/docs/code-splitting.html
       // Reference: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-      new CommonsChunkPlugin({
+      new webpack.optimize.CommonsChunkPlugin({
         name: ['vendor', 'polyfills']
       }),
 

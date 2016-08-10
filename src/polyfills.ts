@@ -1,8 +1,9 @@
 import 'es6-shim';
 import 'reflect-metadata';
-require('zone.js/dist/zone');
+import 'zone.js';
 
 import 'ts-helpers';
+import 'web-animations-js';
 
 if (process.env.ENV === 'build') {
   // Production
