@@ -4,11 +4,12 @@ import { RootComponent } from './app.component';
 
 import routes from './app.routes';
 
+import { SharedModule } from './shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { CompanyDetailsModule } from './companyDetails/companyDetails.module';
 import { PriceGraphModule } from './priceGraph/priceGraph.module';
-import { DataTableForStockModule } from './dataTableForStock/dataTableForStock.module';
 import { HighLowVolumeModule } from './highLowVolume/highLowVolume.module';
+import { CompanyDetailsModule } from './companyDetails/companyDetails.module';
+import { DataTableForStockModule } from './dataTableForStock/dataTableForStock.module';
 
 
 @NgModule({
@@ -16,6 +17,8 @@ import { HighLowVolumeModule } from './highLowVolume/highLowVolume.module';
     BrowserModule,
     // Router
     RouterModule.forRoot(routes),
+    // Shared
+    SharedModule.forRoot(),
 
     CompanyDetailsModule,
     PriceGraphModule,
