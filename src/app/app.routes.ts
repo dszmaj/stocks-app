@@ -6,6 +6,7 @@ import { CompanyDetailsComponent } from './companyDetails/companyDetails.compone
 
 export default [
   { path: '', redirectTo: 'price-graph', pathMatch: 'full'},
+
   { path: 'price-graph', component: PriceGraphComponent },
   { path: 'high-low-volume', component: HighLowVolumeComponent},
   { path: 'data-table', component: DataTableForStockComponent },
