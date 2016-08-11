@@ -6,20 +6,20 @@ import {
 import { StoreService } from '../shared/store.service';
 
 @Component({
-    selector: 'price-graph',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `name`
+  selector: 'price-graph',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <graph [data]="store.observe$ | async"></graph>
+      </div>
+    </div>
+  </div>
+  `
 })
 export class PriceGraphComponent implements OnInit {
-  constructor(private store: StoreService) {
-    this.store.observe$.subscribe(state => console.log(state))
-  }
+  constructor(private store: StoreService) {}
 
-  ngOnInit() {
-    this.store.getData({
-      symbols: ['CSCO', 'YHOO'],
-      startDate: '2009-09-11',
-      endDate: '2010-03-10'
-    })
-  }
+  ngOnInit() {}
 }

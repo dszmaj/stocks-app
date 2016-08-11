@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { PriceGraphComponent } from './priceGraph.component';
+import { GraphComponent } from './graph.component';
 
 
 @NgModule({
@@ -8,10 +9,12 @@ import { PriceGraphComponent } from './priceGraph.component';
     CommonModule
   ],
   declarations: [
-    PriceGraphComponent
+    PriceGraphComponent,
+    GraphComponent
   ],
   exports: [
-    PriceGraphComponent
+    PriceGraphComponent,
+    GraphComponent
   ]
 })
 export class PriceGraphModule {}

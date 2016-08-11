@@ -7,7 +7,7 @@ import '../style/app.scss';
   selector: '[my-app]',
   template: `
   <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -29,11 +29,7 @@ import '../style/app.scss';
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
-  
-  <div class="container-fluid">
-    <router-outlet></router-outlet>
-  </div>
-  <ng-content></ng-content>
+  <router-outlet></router-outlet>
   `
 })
 export class RootComponent {

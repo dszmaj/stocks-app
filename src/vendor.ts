@@ -17,6 +17,7 @@ import '@ngrx/effects';
 
 // D3
 import 'd3';
+import 'd3fc';
 
 // jQuery
 import 'jquery';

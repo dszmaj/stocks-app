@@ -75,7 +75,6 @@ export class StoreService {
       '" and endDate = "'
       + params.endDate +
       '"';
-    console.log(query);
     return query
   }
 }
