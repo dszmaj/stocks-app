@@ -3,6 +3,7 @@ import {
   Component,
   ChangeDetectionStrategy
 } from '@angular/core';
+import { StoreService } from '../shared/store.service';
 
 @Component({
     selector: 'price-graph',
@@ -10,7 +11,11 @@ import {
     template: `name`
 })
 export class PriceGraphComponent implements OnInit {
-    constructor() {}
+    constructor(private store: StoreService) {
+      this.store.observe$.subscribe(state => console.log(state))
+    }
 
-    ngOnInit() {}
+    ngOnInit() {
+      this.store.getData('select * from yahoo.finance.historicaldata where symbol = "CSCO" and startDate = "2009-09-11" and endDate = "2010-03-10"')
+    }
 }
