@@ -1,9 +1,13 @@
 import {
   OnInit,
   Component,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy, Output, EventEmitter
 } from '@angular/core';
 import { Http } from '@angular/http';
+import { Observable } from 'rxjs';
+import { UtilsService } from '../shared/utils.service';
+
+declare const d3;
 
 @Component({
   selector: 'full-list',
@@ -13,7 +17,8 @@ import { Http } from '@angular/http';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-  <h3>Pick max. 3</h3>
+  <h3>Symbols:</h3>
+  <p><small>Select max. 3</small></p>
   <select multiple class="form-control">
     <option>1</option>
     <option>2</option>
@@ -24,7 +29,18 @@ import { Http } from '@angular/http';
   `
 })
 export class FullListComponent implements OnInit {
-  constructor(private http: Http) {}
+  @Output() currentSelection: EventEmitter<Object> = new EventEmitter();
 
-  ngOnInit() {}
+  constructor(
+    private http: Http,
+    private utils: UtilsService
+  ) {}
+
+  ngOnInit() {
+    this.http.get(this.utils.makeQuery({
+      symbols:   ['CSCO'],
+      startDate: '2010-01-01',
+      endDate:   '2010-06-01'
+    })).subscribe(data => this.currentSelection.emit(data.json()));
+  }
 }
