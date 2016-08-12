@@ -3,27 +3,17 @@ import {
   BehaviorSubject,
 } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { Http, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { StoreActions } from './store.actions';
 
 
-interface QueryParams {
-  symbols: string[];
-  startDate: string;
-  endDate: string;
-}
+declare const d3;
 
 @Injectable()
 export class StoreService {
   private data: Object = {};
   private store: BehaviorSubject<Object> = new BehaviorSubject(this.data);
-  public observe$: Observable<Object> = this.store
-    .asObservable()
-    .distinctUntilChanged()
-    .share();
-
-  constructor(private http: Http) {}
+  public observe$: Observable<Object> = this.store.asObservable().distinctUntilChanged().share();
 
   dispatch(action: Action) {
     switch (action.type) {
@@ -37,26 +27,27 @@ export class StoreService {
     switch (action.type) {
       case StoreActions.LOAD_TO_STORE: {
         let temp  = {
-          results:   action.payload.query.results
+          results:   action.payload.query.results.quote
         };
         this.data = Object.assign(this.data, temp);
         return this.send(this.data);
       }
+      case StoreActions.REQUEST_DATA: {
+
+      }
     }
+  }
+
+  a() {
+    d3.json(this.makeQuery({
+      symbols:   ['YHOO', 'CSCO', 'MSFT'],
+      startDate: '2010-01-01',
+      endDate:   '2010-06-01'
+    }), data => this.renderChart(data))
   }
 
   send(data) {
     this.store.next(data);
-  }
-
-  getData(params: QueryParams): void {
-    this.http.get(
-      'https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.historicaldata where '
-      + this.makeQuery(params) +
-      '&format=json&diagnostics=false&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback='
-    )
-      .map((res: Response) => res.json())
-      .subscribe(data => this.dispatch(StoreActions.loadToStore(data)));
   }
 
   private makeQuery(params: QueryParams): string {
@@ -75,6 +66,7 @@ export class StoreService {
       '" and endDate = "'
       + params.endDate +
       '"';
-    return query
+    return 'https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.historicaldata where ' + query +
+      '&format=json&diagnostics=false&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback='
   }
 }
