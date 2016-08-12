@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StoreService } from './store.service';
+import { UtilsService } from './utils.service';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ export class SharedModule {
     return {
       ngModule:  SharedModule,
       providers: [
-        StoreService
+        StoreService,
+        UtilsService
       ]
     };
   }
