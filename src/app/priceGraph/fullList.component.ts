@@ -25,19 +25,17 @@ declare const d3;
   `
 })
 export class FullListComponent implements OnInit {
+  private symbols: Observable<Object[]>;
   @Output() currentSelection: EventEmitter<Object> = new EventEmitter();
-
-  // dirty hack, couldn't find solution for csv parsing that works in browser and is nice for webpack ;)
-  // YQL doesnt provide a way for quickly fetching symbol list with one query
-  private getObservable = Observable.bindCallback(d3.csv);
-  private symbols: Observable<Object> = this
-    .getObservable('//www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download')
-    .map(data => data[1]);
 
   constructor(
     private http: Http,
     private utils: UtilsService
-  ) {}
+  ) {
+    let getObservable = Observable.bindCallback(d3.csv);
+    this.symbols = getObservable('//www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download')
+      .map(data => data[1]);
+  }
 
   ngOnInit() {
     this.http.get(this.utils.makeQuery({
