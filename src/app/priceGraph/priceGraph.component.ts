@@ -9,7 +9,9 @@ declare const fc;
   template: `
   <div class="container">
     <div class="row">
-      <full-list (currentSelection)="renderChart($event)"></full-list>
+      <full-list 
+        (currentSelection)="renderChart($event)"
+      ></full-list>
       <div class="chart col-md-8">
         <form class="form-inline">
           <div class="form-group">
