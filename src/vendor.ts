@@ -24,4 +24,3 @@ import 'jquery';
 import 'bootstrap';
 
 // Utils
-import 'papaparse';
