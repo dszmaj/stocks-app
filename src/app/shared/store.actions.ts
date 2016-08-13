@@ -5,15 +5,15 @@ export class StoreActions {
   public static LOAD_TO_STORE = 'Load to store';
   public static loadToStore(payload): Action {
     return {
-      type: StoreActions.LOAD_TO_STORE,
+      type:    StoreActions.LOAD_TO_STORE,
       payload: payload
     }
   }
 
-  public static REQUEST_DATA = 'Request data for given symbol';
-  public static requestData(payload): Action {
+  public static LOAD_SYMBOLS_TO_STORE = 'Load parsed symbols to store';
+  public static loadSymbols(payload): Action {
     return {
-      type:    StoreActions.REQUEST_DATA,
+      type:    StoreActions.LOAD_SYMBOLS_TO_STORE,
       payload: payload
     }
   }
