@@ -8,5 +8,8 @@
     "noEmitHelpers": true
   },
   "compileOnSave": false,
-  "buildOnSave": false
+  "buildOnSave": false,
+  "files": [
+    "typings/index.d.ts"
+  ]
 }

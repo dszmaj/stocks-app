@@ -1,7 +1,5 @@
+import * as d3 from 'd3';
 import { Component } from '@angular/core';
-
-declare const d3;
-declare const fc;
 
 
 @Component({

@@ -6,16 +6,13 @@ import {
   ViewEncapsulation,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import {
-  State,
-  StoreService
-} from '../shared/store.service';
+import * as d3 from 'd3';
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http';
+import { StoreService } from '../shared/store.service';
 import { UtilsService } from '../shared/utils.service';
 import { StoreActions } from '../shared/store.actions';
 
-declare const d3;
 
 @Component({
   selector: 'full-list',
@@ -32,7 +29,7 @@ declare const d3;
   `
 })
 export class FullListComponent implements OnInit {
-  private symbols: Observable<State> = this.store.observe$.map(state => state.symbols);
+  private symbols: Observable<string[]> = this.store.observe$.map(state => state.symbols);
   @Output() currentSelection: EventEmitter<Object> = new EventEmitter();
 
   constructor(
@@ -42,6 +39,7 @@ export class FullListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // initial data for placeholder chart
     this.http.get(this.utils.makeQuery({
       symbols:   ['CSCO'],
       startDate: '2010-01-01',
@@ -50,6 +48,9 @@ export class FullListComponent implements OnInit {
       .map(data => data.json())
       .do(data => this.store.dispatch(StoreActions.loadToStore(data)))
       .subscribe(data => this.currentSelection.emit(data));
+    // hacked csv parsing
+    // for this to work CORS must be disabled in browser
+    // normally I would create server endpoint that will download, parse, store and serve as JSON
     let nasdaq = '//www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download';
     Observable
       .bindCallback(d3.csv)(nasdaq)
