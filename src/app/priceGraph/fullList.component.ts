@@ -1,7 +1,10 @@
 import {
   OnInit,
+  Output,
   Component,
-  ChangeDetectionStrategy, Output, EventEmitter
+  EventEmitter,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http';
@@ -11,10 +14,13 @@ declare const d3;
 
 @Component({
   selector: 'full-list',
-  host: {
-    'class': 'col-md-2',
-    //'style': 'display: block;'
-  },
+  host: {'class': 'col-md-2'},
+  styles: [`
+    select {
+      height: 400px;
+    }
+  `],
+  encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <h3>Symbols:</h3>
