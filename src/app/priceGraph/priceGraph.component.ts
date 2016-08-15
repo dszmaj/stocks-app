@@ -1,5 +1,8 @@
+import {
+  OnInit,
+  Component
+} from '@angular/core';
 import * as d3 from 'd3';
-import { Component } from '@angular/core';
 
 
 @Component({
@@ -37,36 +40,38 @@ import { Component } from '@angular/core';
   </div>
   `
 })
-export class PriceGraphComponent {
+export class PriceGraphComponent implements OnInit {
+  private svg;
+  private border;
 
-  private border: number = 1;
-  private width: number = 700;
-  private height: number = 300;
+  private width: number       = 700;
+  private height: number      = 300;
   private borderColor: string = 'black';
 
-  renderChart(event) {
-    let svg    = this.createSVG();
-    let border = this.createBorder(svg);
+  ngOnInit() {
+    this.svg = this.createSVG();
+    this.border = this.createBorder(this.svg);
   }
+
+  renderChart(event) {}
 
   createSVG() {
     return d3
-      .select(".chart")
-      .append("svg")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .attr("border", this.border);
+      .select('.chart')
+      .append('svg')
+      .attr('width', this.width)
+      .attr('height', this.height);
   }
 
   createBorder(svg) {
     return svg
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("height", this.height)
-      .attr("width", this.width)
-      .style("stroke", this.borderColor)
-      .style("fill", "gray")
-      .style("stroke-width", this.border);
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('height', this.height)
+      .attr('width', this.width)
+      .style('stroke', this.borderColor)
+      .style('fill', "gray")
+      .style('stroke-width', this.border);
   }
 }
