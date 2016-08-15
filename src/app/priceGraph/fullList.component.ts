@@ -9,9 +9,10 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import * as d3 from 'd3';
-import * as last from 'lodash.last';
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http';
+import * as mapFrom from 'lodash.map';
+import * as lastFrom from 'lodash.last';
 import { StoreService } from '../shared/store.service';
 import { UtilsService } from '../shared/utils.service';
 import { StoreActions } from '../shared/store.actions';
@@ -44,14 +45,7 @@ export class FullListComponent implements OnInit {
 
   ngOnInit() {
     // initial data for placeholder chart
-    this.http.get(this.utils.makeQuery({
-      symbols:   ['CSCO'],
-      startDate: '2010-01-01',
-      endDate:   '2010-06-01'
-    }))
-      .map(data => data.json())
-      .do(data => this.store.dispatch(StoreActions.loadToStore(data)))
-      .subscribe(data => this.currentSelection.emit(data));
+    this.emitStandardSymbols(['CSCO']);
 
     // hacked csv parsing
     // normally I would create server endpoint that will download, parse, store and serve as JSON
@@ -63,7 +57,20 @@ export class FullListComponent implements OnInit {
   selectedOptions() {
     let selections = this.select.nativeElement.selectedOptions;
     while (selections.length > 3) {
-      last(selections).selected = false;
+      lastFrom(selections).selected = false;
     }
+    this.emitStandardSymbols(mapFrom(selections, option => option.value));
+  }
+
+  emitStandardSymbols(symbols: string[]): void {
+    console.log(symbols);
+    this.http.get(this.utils.makeQuery({
+      symbols:   symbols,
+      startDate: '2010-01-01',
+      endDate:   '2010-06-01'
+    }))
+      .map(data => data.json())
+      .do(data => this.store.dispatch(StoreActions.loadToStore(data)))
+      .subscribe(data => this.currentSelection.emit(data));
   }
 }
