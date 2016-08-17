@@ -1,10 +1,8 @@
 import {
   OnInit,
-  Output,
   Component,
   ViewChild,
   ElementRef,
-  EventEmitter,
   ViewEncapsulation,
   ChangeDetectionStrategy,
 } from '@angular/core';
@@ -33,19 +31,21 @@ import { StoreActions } from '../shared/store.actions';
   `
 })
 export class FullListComponent implements OnInit {
-  private symbols: Observable<string[]> = this.store.observe$.map(state => state.symbols);
-  @Output() currentSelection: EventEmitter<Object> = new EventEmitter();
   @ViewChild('sel') select: ElementRef;
+  private symbols: Observable<string[]>;
 
   constructor(
     private http: Http,
     private store: StoreService,
     private utils: UtilsService
-  ) {}
+  ) {
+    this.symbols = store.observe$
+      .map(state => state.allSymbols);
+  }
 
   ngOnInit() {
     // initial data for placeholder chart
-    this.emitStandardSymbols(['CSCO']);
+    this.getSymbols(['CSCO']);
 
     // hacked csv parsing
     // normally I would create server endpoint that will download, parse, store and serve as JSON
@@ -59,18 +59,17 @@ export class FullListComponent implements OnInit {
     while (selections.length > 3) {
       lastFrom(selections).selected = false;
     }
-    this.emitStandardSymbols(mapFrom(selections, option => option.value));
+    this.getSymbols(mapFrom(selections, option => option.value));
   }
 
-  emitStandardSymbols(symbols: string[]): void {
-    console.log(symbols);
+  getSymbols(symbols: string[]): void {
+    this.store.dispatch(StoreActions.setSelected(symbols));
     this.http.get(this.utils.makeQuery({
       symbols:   symbols,
       startDate: '2010-01-01',
       endDate:   '2010-06-01'
     }))
       .map(data => data.json())
-      .do(data => this.store.dispatch(StoreActions.loadToStore(data)))
-      .subscribe(data => this.currentSelection.emit(data));
+      .subscribe(data => this.store.dispatch(StoreActions.loadToStore(data)));
   }
 }
