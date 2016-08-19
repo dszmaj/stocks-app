@@ -78,7 +78,15 @@ export class PriceGraphComponent implements OnInit {
 
   private brush = d3.brushX(this.x2)
     .extent([[0, 0], [this.width, this.brushHeight]])
-    .on("brush", this.brushed);
+    .on("brush", () => {
+      this.x.domain(this.brush.empty() ? this.x2.domain() : this.brush.extent());
+      this.focus
+        .select(".area")
+        .attr("d", this.area);
+      this.focus
+        .select(".axis--x")
+        .call(this.x_axis);
+    });
 
   constructor(private store: StoreService) {}
 
@@ -106,11 +114,17 @@ export class PriceGraphComponent implements OnInit {
     this.createBrush();
 
     this.focus
+      .select('path')
+      .data(data[0].Adj_Close)
+      .enter()
       .append('path')
       .attr('class', 'area')
       .attr('d', this.area);
 
     this.context
+      .select('path')
+      .data(data[0].Adj_Close)
+      .enter()
       .append('path')
       .attr('class', 'area')
       .attr('d', this.area2);
@@ -175,15 +189,5 @@ export class PriceGraphComponent implements OnInit {
       .append('svg')
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom);
-  }
-
-  brushed() {
-    this.x.domain(this.brush.empty() ? this.x2.domain() : this.brush.extent());
-    this.focus
-      .select(".area")
-      .attr("d", this.area);
-    this.focus
-      .select(".axis--x")
-      .call(this.x_axis);
   }
 }
