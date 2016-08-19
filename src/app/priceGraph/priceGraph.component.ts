@@ -73,6 +73,9 @@ export class PriceGraphComponent implements OnInit {
   private x2_axis = d3.axisBottom(this.x2);
   private y_axis  = d3.axisLeft(this.y);
 
+  private area = d3.area().curve(d3.curveMonotoneX);
+  private area2 = d3.area().curve(d3.curveMonotoneX);
+
   private brush = d3.brushX(this.x2)
     .extent([[0, 0], [this.width, this.brushHeight]])
     .on("brush", this.brushed);
@@ -93,7 +96,7 @@ export class PriceGraphComponent implements OnInit {
   renderChart(data) {
     console.log('Chart data: ', data);
     let x = d3.extent(data[0].Date);
-    let y = [0, d3.max(data[0].Adj_Close)];
+    let y = [d3.min(data[0].Adj_Close), d3.max(data[0].Adj_Close)];
     this.x.domain(x);
     this.y.domain(y);
     this.x2.domain(x);
@@ -102,21 +105,15 @@ export class PriceGraphComponent implements OnInit {
     this.createAxis();
     this.createBrush();
 
-    let area = d3.area(data[0].Adj_Close)
-      .curve(d3.curveMonotoneX);
-
-    let area2 = d3.area(data[0].Adj_Close)
-      .curve(d3.curveMonotoneX);
-
     this.focus
       .append('path')
       .attr('class', 'area')
-      .attr('d', area);
+      .attr('d', this.area);
 
     this.context
       .append('path')
       .attr('class', 'area')
-      .attr('d', area2);
+      .attr('d', this.area2);
   }
 
   createBrush() {
