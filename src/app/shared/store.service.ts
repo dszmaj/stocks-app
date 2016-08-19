@@ -1,5 +1,3 @@
-// for some reason this operator is not included in Observable.prototype by default
-import 'rxjs/add/operator/pairwise';
 import {
   Observable,
   BehaviorSubject,
@@ -27,14 +25,14 @@ interface RawDatapoint {
 }
 
 interface PreparedForSymbol {
-  Symbol:          string,
-  Date:            Date[],
-  Open:            number[],
-  High:            number[],
-  Low:             number[],
-  Close:           number[],
-  Volume:          number[],
-  Adj_Close:       number[]
+  Symbol:    string,
+  Date:      Date[],
+  Open:      number[],
+  High:      number[],
+  Low:       number[],
+  Close:     number[],
+  Volume:    number[],
+  Adj_Close: number[]
 }
 
 
@@ -95,7 +93,7 @@ export class StoreService {
   }
 
   send(data: State) {
-    console.log(data);
+    console.log('Application State: ', data);
     this.store.next(data);
   }
 }
@@ -107,7 +105,6 @@ export class StoreService {
 function prepareResults(data: RawDatapoint[]): PreparedForSymbol[] {
   let finalData = [];
 
-  console.log('initial data: ', data.length);
   // observable of all datapoints with values converted to proper type
   let initial = Observable.from(data)
     .map(datapoint => {

@@ -53,11 +53,13 @@ export class PriceGraphComponent implements OnInit {
   private context;
 
   // general chart area helper variables
-  private width: number           = 700;
-  private height: number          = 400;
-  private brushHeight: number     = 75;
+  private margin = {top: 10, right: 10, bottom: 100, left: 40};
+  private margin2 = {top: 430, right: 10, bottom: 20, left: 40};
+  private width: number       = 700 - this.margin.left - this.margin.right;
+  private height: number      = 500 - this.margin.top - this.margin.bottom;
+  private brushHeight: number = 500 - this.margin2.top - this.margin2.bottom;
 
-  private parseDate = d3.timeFormat('%b %Y');
+  private parseDate = d3.timeParse('%X');
 
   // underscore naming convention for better reading
   // lots of very short variable names
@@ -75,17 +77,20 @@ export class PriceGraphComponent implements OnInit {
   private y_axis = d3.axisLeft(this.y_scale);
 
   private brush = d3.brushX(this.x2_scale)
-    .on('brush', this.brushed);
+    .extent([[0, 0], [this.width, this.brushHeight]])
+    .on("brush end", this.brushed);
 
   private area = d3.area()
-    .x(d => this.x_scale(d.date))
+    .curve(d3.curveMonotoneX)
+    .x(d => this.x_scale(d.Date))
     .y0(this.height)
-    .y1(d => this.y_scale(d.price));
+    .y1(d => this.y_scale(d.Adj_Close));
 
   private area2 = d3.area()
-    .x(d => this.x2_scale(d.date))
+    .curve(d3.curveMonotoneX)
+    .x(d => this.x2_scale(d.Date))
     .y0(this.brushHeight)
-    .y1(d => this.y2_scale(d.price));
+    .y1(d => this.y2_scale(d.Adj_Close));
 
   constructor(private store: StoreService) {}
 
@@ -107,36 +112,48 @@ export class PriceGraphComponent implements OnInit {
     this.x2_scale.domain(this.x_scale.domain());
     this.y2_scale.domain(this.y_scale.domain());
 
-    this.focus.append('path')
-      .datum(data)
+    this.focus
+      .append('path')
+      .datum(data[0])
       .attr('class', 'area')
       .attr('d', this.area);
 
-    this.focus.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + this.height + ')')
-      .call(this.x_axis);
-
-    this.focus.append('g')
-      .attr('class', 'y axis')
-      .call(this.y_axis);
-
-    this.context.append('path')
-      .datum(data)
+    this.context
+      .append('path')
+      .datum(data[0])
       .attr('class', 'area')
       .attr('d', this.area2);
 
-    this.context.append('g')
+    this.focus
+      .append('g')
       .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + this.brushHeight + ')')
+      .attr('transform', 'translate(0,'+ this.height +')')
+      .call(this.x_axis);
+
+    this.context
+      .append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,'+ this.brushHeight +')')
       .call(this.x2_axis);
 
-    this.context.append('g')
+    this.focus
+      .append('g')
+      .attr('class', 'y axis')
+      .call(this.y_axis);
+
+    this.context
+      .append("g")
+      .attr("class", "brush")
+      .call(this.brush)
+      .call(this.brush.move, this.x_scale.range());
+
+    this.context
+      .append('g')
       .attr('class', 'x brush')
       .call(this.brush)
       .selectAll('rect')
       .attr('y', -6)
-      .attr('height', this.brushHeight + 7);
+      .attr('height', this.brushHeight);
   }
 
   createDefs(svg) {
@@ -153,41 +170,28 @@ export class PriceGraphComponent implements OnInit {
     return svg
       .append('g')
       .attr('class', 'focus')
-      .attr('transform', 'translate(10,10)');
+      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
   }
 
   createContext(svg) {
     return svg
       .append('g')
       .attr('class', 'context')
-      .attr('transform', 'translate(10,10)');
+      .attr('transform', 'translate(' + this.margin2.left + ',' + this.margin2.top + ')');
   }
 
   createSVG() {
     return d3
       .select('.chart')
       .append('svg')
-      .attr('width', this.width)
-      .attr('height', this.height);
+      .attr('width', this.width + this.margin.left + this.margin.right)
+      .attr('height', this.height + this.margin.top + this.margin.bottom);
   }
 
   brushed() {
-    this.x_scale
-      .domain(this.brush.empty()
-        ? this.x2_scale.domain()
-        : this.brush.extent()
-      );
-    this.focus
-      .select(".area")
-      .attr("d", this.area);
-    this.focus
-      .select(".x.axis")
-      .call(this.x_axis);
-  }
-
-  type(d) {
-    d.date  = this.parseDate(d.date);
-    d.price = +d.price;
-    return d;
+    let s = d3.event.selection || this.x2_scale.range();
+    this.x_scale.domain(s.map(this.x2_scale.invert, this.x2_scale));
+    this.focus.select(".area").attr("d", this.area);
+    this.focus.select(".axis--x").call(this.x_axis);
   }
 }
