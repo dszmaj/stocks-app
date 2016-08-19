@@ -114,13 +114,13 @@ export class PriceGraphComponent implements OnInit {
 
     this.focus
       .append('path')
-      .datum(data[0])
+      .datum(data[0].Adj_Close)
       .attr('class', 'area')
       .attr('d', this.area);
 
     this.context
       .append('path')
-      .datum(data[0])
+      .datum(data[0].Adj_Close)
       .attr('class', 'area')
       .attr('d', this.area2);
 
@@ -190,8 +190,13 @@ export class PriceGraphComponent implements OnInit {
 
   brushed() {
     let s = d3.event.selection || this.x2_scale.range();
-    this.x_scale.domain(s.map(this.x2_scale.invert, this.x2_scale));
-    this.focus.select(".area").attr("d", this.area);
-    this.focus.select(".axis--x").call(this.x_axis);
+    this.x_scale
+      .domain(s.map(this.x2_scale.invert, this.x2_scale));
+    this.focus
+      .select(".area")
+      .attr("d", this.area);
+    this.focus
+      .select(".axis--x")
+      .call(this.x_axis);
   }
 }

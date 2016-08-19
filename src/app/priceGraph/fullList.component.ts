@@ -1,5 +1,6 @@
 import {
   OnInit,
+  Renderer,
   Component,
   ViewChild,
   ElementRef,
@@ -36,6 +37,7 @@ export class FullListComponent implements OnInit {
 
   constructor(
     private http: Http,
+    private renderer: Renderer,
     private store: StoreService,
     private utils: UtilsService
   ) {
@@ -57,7 +59,7 @@ export class FullListComponent implements OnInit {
   selectedOptions() {
     let selections = this.select.nativeElement.selectedOptions;
     while (selections.length > 3) {
-      lastFrom(selections).selected = false;
+      this.renderer.setElementProperty(lastFrom(selections), 'selected', false);
     }
     this.getSymbols(mapFrom(selections, option => option.value));
   }
