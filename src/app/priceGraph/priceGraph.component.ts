@@ -54,6 +54,8 @@ export class PriceGraphComponent implements OnInit {
   private svg;
   private axis;
   private defs;
+  private area;
+  private area2;
   private focus;
   private brush;
   private x_axis;
@@ -66,13 +68,7 @@ export class PriceGraphComponent implements OnInit {
   private margin2             = {top: 430, right: 10, bottom: 20, left: 40};
   private width: number       = 700 - this.margin.left - this.margin.right;
   private height: number      = 500 - this.margin.top - this.margin.bottom;
-
   private brushHeight: number = 500 - this.margin2.top - this.margin2.bottom;
-
-  private parseDate = d3.timeParse('%X');
-
-  private area = d3.area().curve(d3.curveMonotoneX);
-  private area2 = d3.area().curve(d3.curveMonotoneX);
 
   constructor(private store: StoreService) {}
 
@@ -95,10 +91,16 @@ export class PriceGraphComponent implements OnInit {
     this.createScale(x, y);
     this.createAxis();
     this.createBrush();
+    this.drawChartArea(data[0]);
+  }
+
+  drawChartArea(data) {
+    this.area = d3.area().curve(d3.curveMonotoneX);
+    this.area2 = d3.area().curve(d3.curveMonotoneX);
 
     this.focus
       .select('path')
-      .data(data[0].Adj_Close)
+      .data(data.Adj_Close)
       .enter()
       .append('path')
       .attr('class', 'area')
@@ -106,7 +108,7 @@ export class PriceGraphComponent implements OnInit {
 
     this.context
       .select('path')
-      .data(data[0].Adj_Close)
+      .data(data.Adj_Close)
       .enter()
       .append('path')
       .attr('class', 'area')
