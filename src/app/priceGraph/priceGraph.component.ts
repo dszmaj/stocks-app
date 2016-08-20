@@ -47,46 +47,32 @@ import { StoreService } from '../shared/store.service';
 })
 export class PriceGraphComponent implements OnInit {
   // active use elements
+  private x;
+  private y;
+  private x2;
+  private y2;
   private svg;
   private axis;
   private defs;
   private focus;
+  private brush;
+  private x_axis;
+  private y_axis;
   private context;
+  private x2_axis;
 
   // general chart area helper variables
   private margin              = {top: 10, right: 10, bottom: 100, left: 40};
   private margin2             = {top: 430, right: 10, bottom: 20, left: 40};
   private width: number       = 700 - this.margin.left - this.margin.right;
   private height: number      = 500 - this.margin.top - this.margin.bottom;
+
   private brushHeight: number = 500 - this.margin2.top - this.margin2.bottom;
 
   private parseDate = d3.timeParse('%X');
 
-  // underscore naming convention for better reading
-  // lots of very short variable names
-  private x  = d3.scaleTime().range([0, this.width]);
-  private x2 = d3.scaleTime().range([0, this.width]);
-  private y  = d3.scaleLinear().range([this.height, 0]);
-  private y2 = d3.scaleLinear().range([this.brushHeight, 0]);
-
-  private x_axis  = d3.axisBottom(this.x);
-  private x2_axis = d3.axisBottom(this.x2);
-  private y_axis  = d3.axisLeft(this.y);
-
   private area = d3.area().curve(d3.curveMonotoneX);
   private area2 = d3.area().curve(d3.curveMonotoneX);
-
-  private brush = d3.brushX(this.x2)
-    .extent([[0, 0], [this.width, this.brushHeight]])
-    .on("brush", () => {
-      this.x.domain(this.brush.empty() ? this.x2.domain() : this.brush.extent());
-      this.focus
-        .select(".area")
-        .attr("d", this.area);
-      this.focus
-        .select(".axis--x")
-        .call(this.x_axis);
-    });
 
   constructor(private store: StoreService) {}
 
@@ -105,11 +91,8 @@ export class PriceGraphComponent implements OnInit {
     console.log('Chart data: ', data);
     let x = d3.extent(data[0].Date);
     let y = [d3.min(data[0].Adj_Close), d3.max(data[0].Adj_Close)];
-    this.x.domain(x);
-    this.y.domain(y);
-    this.x2.domain(x);
-    this.y2.domain(y);
 
+    this.createScale(x, y);
     this.createAxis();
     this.createBrush();
 
@@ -130,7 +113,30 @@ export class PriceGraphComponent implements OnInit {
       .attr('d', this.area2);
   }
 
+  createScale(x, y) {
+    this.x = d3.scaleTime().domain(x).range([0, this.width]);
+    this.y = d3.scaleLinear().domain(y).range([this.height, 0]);
+    this.x2 = d3.scaleTime().domain(x).range([0, this.width]);
+    this.y2 = d3.scaleLinear().domain(y).range([this.brushHeight, 0]);
+  }
+
   createBrush() {
+    this.brush = d3.brushX(this.x2)
+      .extent([[0, 0], [this.width, this.brushHeight]])
+      .on("brush", () => {
+        this.x.domain(
+          d3.brushSelection(this.brush) !== null
+            ? this.x2.domain()
+            : this.brush.extent()
+        );
+        this.focus
+          .select(".area")
+          .attr("d", this.area);
+        this.focus
+          .select(".axis--x")
+          .call(this.x_axis);
+      });
+
     this.context
       .append('g')
       .attr('class', 'x brush')
@@ -141,6 +147,10 @@ export class PriceGraphComponent implements OnInit {
   }
 
   createAxis() {
+    this.x_axis = d3.axisBottom(this.x);
+    this.x2_axis = d3.axisBottom(this.x2);
+    this.y_axis = d3.axisLeft(this.y);
+
     this.focus
       .append('g')
       .attr('class', 'x axis')
