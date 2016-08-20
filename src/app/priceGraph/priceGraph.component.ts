@@ -10,8 +10,7 @@ import { StoreService } from '../shared/store.service';
   selector: 'price-graph',
   styles: [
     `svg {font: 10px sans-serif;}`,
-    `.area {fill: steelblue !important; clip-path: url(#clip);}`,
-    `.axis path .axis line {fill: none; stroke: #000; shape-rendering: crispEdges;}`,
+    `.axis .axis line {fill: none; stroke: #000; shape-rendering: crispEdges;}`,
     `.brush .extent {stroke: #fff; fill-opacity: .125; shape-rendering: crispEdges;}`
   ],
   template: `
@@ -73,9 +72,9 @@ export class PriceGraphComponent implements OnInit {
   constructor(private store: StoreService) {}
 
   ngOnInit() {
-    this.svg = this.createSVG();
-    this.defs = this.createDefs(this.svg);
-    this.focus = this.createFocus(this.svg);
+    this.svg     = this.createSVG();
+    this.defs    = this.createDefs(this.svg);
+    this.focus   = this.createFocus(this.svg);
     this.context = this.createContext(this.svg);
 
     this.store.observe$
@@ -112,13 +111,13 @@ export class PriceGraphComponent implements OnInit {
     this.focus
       .append('path')
       .datum(data)
-      .attr('class', 'area')
+      .attr('style', 'fill: steelblue; clip-path: url(#clip);')
       .attr('d', this.area);
 
     this.context
       .append('path')
       .datum(data)
-      .attr('class', 'area')
+      .attr('style', 'fill: steelblue; clip-path: url(#clip);')
       .attr('d', this.area2);
   }
 
