@@ -91,12 +91,14 @@ export class PriceGraphComponent implements OnInit {
     ];
 
     this.createScale(x, y);
+    this.drawChartArea(data[0]);
     this.createAxis();
     this.createBrush();
-    this.drawChartArea(data[0]);
   }
 
   drawChartArea(data) {
+    let style = 'fill: steelblue; clip-path: url(#clip);';
+
     this.area = d3.area()
       .curve(d3.curveMonotoneX)
       .x(d => this.x(d.Date))
@@ -111,13 +113,13 @@ export class PriceGraphComponent implements OnInit {
     this.focus
       .append('path')
       .datum(data)
-      .attr('style', 'fill: steelblue; clip-path: url(#clip);')
+      .attr('style', style)
       .attr('d', this.area);
 
     this.context
       .append('path')
       .datum(data)
-      .attr('style', 'fill: steelblue; clip-path: url(#clip);')
+      .attr('style', style)
       .attr('d', this.area2);
   }
 
