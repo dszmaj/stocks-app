@@ -3,6 +3,7 @@ import {
   BehaviorSubject,
 } from 'rxjs';
 import { Action } from '@ngrx/store';
+import * as lastFrom from 'lodash.last';
 import { Injectable } from '@angular/core';
 import { StoreActions } from './store.actions';
 
@@ -110,29 +111,22 @@ function prepareResults(data: RawDatapoint[]): PreparedForSymbol[] {
     .map(datapoint => {
       let temp       = Object.assign({}, datapoint);
       temp.Symbol    = datapoint.Symbol;
-      temp.Date      = [new Date(datapoint.Date)];
-      temp.Open      = [parseFloat(datapoint.Open)];
-      temp.High      = [parseFloat(datapoint.High)];
-      temp.Low       = [parseFloat(datapoint.Low)];
-      temp.Close     = [parseFloat(datapoint.Close)];
-      temp.Volume    = [parseInt(datapoint.Volume)];
-      temp.Adj_Close = [parseFloat(datapoint.Adj_Close)];
+      temp.Date      = new Date(datapoint.Date);
+      temp.Open      = parseFloat(datapoint.Open);
+      temp.High      = parseFloat(datapoint.High);
+      temp.Low       = parseFloat(datapoint.Low);
+      temp.Close     = parseFloat(datapoint.Close);
+      temp.Volume    = parseInt(datapoint.Volume);
+      temp.Adj_Close = parseFloat(datapoint.Adj_Close);
       return temp;
     })
     .reduce((acc, curr) => {
-      let temp = Object.assign({}, acc);
-      if (acc.Symbol === curr.Symbol) {
-        temp.Symbol    = curr.Symbol;
-        temp.Date      = temp.Date.concat(curr.Date);
-        temp.Open      = temp.Open.concat(curr.Open);
-        temp.High      = temp.High.concat(curr.High);
-        temp.Low       = temp.Low.concat(curr.Low);
-        temp.Close     = temp.Close.concat(curr.Close);
-        temp.Volume    = temp.Volume.concat(curr.Volume);
-        temp.Adj_Close = temp.Adj_Close.concat(curr.Adj_Close);
+      let temp = [].concat(acc);
+      if (lastFrom(temp).Symbol === curr.Symbol) {
+        temp = temp.concat([curr])
       } else {
         finalData.push(temp);
-        temp = Object.assign({}, curr);
+        temp = [].concat(curr);
       }
       return temp;
     })

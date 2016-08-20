@@ -10,7 +10,7 @@ import { StoreService } from '../shared/store.service';
   selector: 'price-graph',
   styles: [
     `svg {font: 10px sans-serif;}`,
-    `.area {fill: steelblue; clip-path: url(#clip);}`,
+    `.area {fill: steelblue !important; clip-path: url(#clip);}`,
     `.axis path .axis line {fill: none; stroke: #000; shape-rendering: crispEdges;}`,
     `.brush .extent {stroke: #fff; fill-opacity: .125; shape-rendering: crispEdges;}`
   ],
@@ -85,8 +85,11 @@ export class PriceGraphComponent implements OnInit {
 
   renderChart(data) {
     console.log('Chart data: ', data);
-    let x = d3.extent(data[0].Date);
-    let y = [d3.min(data[0].Adj_Close), d3.max(data[0].Adj_Close)];
+    let x = d3.extent(data[0].map(d => d.Date));
+    let y = [
+      d3.min(data[0].map(d => d.Close)),
+      d3.max(data[0].map(d => d.Close))
+    ];
 
     this.createScale(x, y);
     this.createAxis();
@@ -95,22 +98,26 @@ export class PriceGraphComponent implements OnInit {
   }
 
   drawChartArea(data) {
-    this.area = d3.area().curve(d3.curveMonotoneX);
-    this.area2 = d3.area().curve(d3.curveMonotoneX);
+    this.area = d3.area()
+      .curve(d3.curveMonotoneX)
+      .x(d => this.x(d.Date))
+      .y0(this.height)
+      .y1(d => this.y(d.Close));
+    this.area2 = d3.area()
+      .curve(d3.curveMonotoneX)
+      .x(d => this.x2(d.Date))
+      .y0(this.brushHeight)
+      .y1(d => this.y2(d.Close));
 
     this.focus
-      .select('path')
-      .data(data.Adj_Close)
-      .enter()
       .append('path')
+      .datum(data)
       .attr('class', 'area')
       .attr('d', this.area);
 
     this.context
-      .select('path')
-      .data(data.Adj_Close)
-      .enter()
       .append('path')
+      .datum(data)
       .attr('class', 'area')
       .attr('d', this.area2);
   }
