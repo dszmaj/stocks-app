@@ -84,11 +84,19 @@ export class PriceGraphComponent implements OnInit {
 
   renderChart(data) {
     console.log('Chart data: ', data);
-    let x = d3.extent(data[0].map(d => d.Date));
-    let y = [
-      d3.min(data[0].map(d => d.Close)),
-      d3.max(data[0].map(d => d.Close))
-    ];
+    let min = () => {
+      let min = d3.min(data[0].map(d => d.Close));
+      return 0.95 * min;
+    };
+    let max = () => {
+      let max = d3.max(data[0].map(d => d.Close));
+      return 1.05 * max;
+    };
+    let extent = () => {
+      return d3.extent(data[0].map(d => d.Date));
+    };
+    let x = extent();
+    let y = [min(), max()];
 
     this.createScale(x, y);
     this.drawChartArea(data[0]);
