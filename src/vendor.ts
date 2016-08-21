@@ -1,19 +1,14 @@
 // Angular 2
-import '@angular/platform-browser';
-import '@angular/platform-browser-dynamic';
 import '@angular/core';
-import '@angular/common';
 import '@angular/http';
 import '@angular/forms';
+import '@angular/common';
 import '@angular/router';
+import '@angular/platform-browser';
+import '@angular/platform-browser-dynamic';
 
 // RxJS
 import 'rxjs';
-
-// @ngrx
-import '@ngrx/core';
-import '@ngrx/store';
-import '@ngrx/effects';
 
 // D3
 import 'd3';
@@ -24,6 +19,10 @@ import 'jquery';
 import 'bootstrap';
 
 // Handsontable
+import 'numbro';
+import 'moment';
+import 'pikaday';
+import 'zeroclipboard';
 import 'handsontable';
 
 // Utils

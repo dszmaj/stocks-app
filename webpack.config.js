@@ -114,12 +114,35 @@ module.exports = function makeWebpackConfig() {
         exclude: root('src', 'app'),
         loader: isTest ? 'null' : ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass')
       },
+      {
+        test: require.resolve('numbro'),
+        loader: 'expose?numbro'
+      },
+      {
+        test: require.resolve('moment'),
+        loader: 'expose?moment'
+      },
+      {
+        test:require.resolve('pikaday'),
+        loader:'expose?Pikaday'
+      },
+      {
+        test:require.resolve('zeroclipboard'),
+        loader:'expose?ZeroClipboard'
+      },
       // all css required in src/app files will be merged in js files
-      {test: /\.scss$/, exclude: root('src', 'style'), loader: 'raw!postcss!sass'},
+      {
+        test: /\.scss$/,
+        exclude: root('src', 'style'),
+        loader: 'raw!postcss!sass'
+      },
 
       // support for .html as raw text
       // todo: change the loader to something that adds a hash to images
-      {test: /\.html$/, loader: 'raw'}
+      {
+        test: /\.html$/,
+        loader: 'raw'
+      }
     ],
     noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/]
   };
