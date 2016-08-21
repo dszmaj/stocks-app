@@ -84,17 +84,10 @@ export class PriceGraphComponent implements OnInit {
 
   renderChart(data) {
     console.log('Chart data: ', data);
-    let min = () => {
-      let min = d3.min(data[0].map(d => d.Close));
-      return 0.95 * min;
-    };
-    let max = () => {
-      let max = d3.max(data[0].map(d => d.Close));
-      return 1.05 * max;
-    };
-    let extent = () => {
-      return d3.extent(data[0].map(d => d.Date));
-    };
+    let extent = () => d3.extent(data[0].map(d => d.Date));
+    let min    = () => 0.95 * d3.min(data[0].map(d => d.Close));
+    let max    = () => 1.05 * d3.max(data[0].map(d => d.Close));
+
     let x = extent();
     let y = [min(), max()];
 
@@ -132,8 +125,8 @@ export class PriceGraphComponent implements OnInit {
   }
 
   createScale(x, y) {
-    this.x = d3.scaleTime().domain(x).range([0, this.width]);
-    this.y = d3.scaleLinear().domain(y).range([this.height, 0]);
+    this.x  = d3.scaleTime().domain(x).range([0, this.width]);
+    this.y  = d3.scaleLinear().domain(y).range([this.height, 0]);
     this.x2 = d3.scaleTime().domain(x).range([0, this.width]);
     this.y2 = d3.scaleLinear().domain(y).range([this.brushHeight, 0]);
   }
@@ -165,9 +158,9 @@ export class PriceGraphComponent implements OnInit {
   }
 
   createAxis() {
-    this.x_axis = d3.axisBottom(this.x);
+    this.x_axis  = d3.axisBottom(this.x);
     this.x2_axis = d3.axisBottom(this.x2);
-    this.y_axis = d3.axisLeft(this.y);
+    this.y_axis  = d3.axisLeft(this.y);
 
     this.focus
       .append('g')
