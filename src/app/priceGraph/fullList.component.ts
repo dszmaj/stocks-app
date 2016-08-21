@@ -8,10 +8,9 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import * as d3 from 'd3';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http';
-import * as mapFrom from 'lodash.map';
-import * as lastFrom from 'lodash.last';
 import { StoreService } from '../shared/store.service';
 import { UtilsService } from '../shared/utils.service';
 import { StoreActions } from '../shared/store.actions';
@@ -59,9 +58,9 @@ export class FullListComponent implements OnInit {
   selectedOptions() {
     let selections = this.select.nativeElement.selectedOptions;
     while (selections.length > 3) {
-      this.renderer.setElementProperty(lastFrom(selections), 'selected', false);
+      this.renderer.setElementProperty(_.last(selections), 'selected', false);
     }
-    this.getSymbols(mapFrom(selections, option => option.value));
+    this.getSymbols(_.map(selections, option => option.value));
   }
 
   getSymbols(symbols: string[]): void {

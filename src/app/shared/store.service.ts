@@ -2,8 +2,8 @@ import {
   Observable,
   BehaviorSubject,
 } from 'rxjs';
+import * as _ from 'lodash';
 import { Action } from '@ngrx/store';
-import * as lastFrom from 'lodash.last';
 import { Injectable } from '@angular/core';
 import { StoreActions } from './store.actions';
 
@@ -122,7 +122,7 @@ function prepareResults(data: RawDatapoint[]): PreparedForSymbol[] {
     })
     .reduce((acc, curr) => {
       let temp = [].concat(acc);
-      if (lastFrom(temp).Symbol === curr.Symbol) {
+      if (_.last(temp).Symbol === curr.Symbol) {
         temp = temp.concat([curr])
       } else {
         finalData.push(temp);

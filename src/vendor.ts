@@ -23,4 +23,8 @@ import 'd3fc';
 import 'jquery';
 import 'bootstrap';
 
+// Handsontable
+import 'handsontable';
+
 // Utils
+import 'lodash';
