@@ -56,11 +56,11 @@ export class FullListComponent implements OnInit {
   }
 
   selectedOptions() {
-    let selections = this.select.nativeElement.selectedOptions;
+    let selections: HTMLCollection = this.select.nativeElement.selectedOptions;
     while (selections.length > 3) {
       this.renderer.setElementProperty(_.last(selections), 'selected', false);
     }
-    this.getSymbols(_.map(selections, option => option.value));
+    this.getSymbols(_.map(selections, (option: HTMLOptionElement) => option.value));
   }
 
   getSymbols(symbols: string[]): void {

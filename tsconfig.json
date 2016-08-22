@@ -10,6 +10,7 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "files": [
-    "typings/index.d.ts"
+    "typings/index.d.ts",
+    "src/custom-typings.d.ts"
   ]
 }
