@@ -183,7 +183,8 @@ module.exports = function makeWebpackConfig() {
     
     new webpack.ProvidePlugin({
       '$': 'jquery',
-      'jQuery': 'jquery'
+      'jQuery': 'jquery',
+      'Handsontable': 'handsontable'
     })
   ];
 

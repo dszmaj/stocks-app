@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { DataTableForStockComponent } from './dataTableForStock';
-import { HandsontableComponent } from './handsontable.component';
 
 
 @NgModule({
@@ -9,11 +8,9 @@ import { HandsontableComponent } from './handsontable.component';
     CommonModule
   ],
   declarations: [
-    HandsontableComponent,
     DataTableForStockComponent
   ],
   exports: [
-    HandsontableComponent,
     DataTableForStockComponent
   ]
 })

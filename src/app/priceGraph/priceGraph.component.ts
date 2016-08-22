@@ -1,8 +1,9 @@
 import {
   OnInit,
-  Component
+  Component, OnDestroy
 } from '@angular/core';
 import * as d3 from 'd3';
+import { Subscription } from 'rxjs';
 import { StoreService } from '../shared/store.service';
 
 
@@ -44,7 +45,7 @@ import { StoreService } from '../shared/store.service';
   </div>
   `
 })
-export class PriceGraphComponent implements OnInit {
+export class PriceGraphComponent implements OnInit, OnDestroy {
   // active use elements
   private x;
   private y;
@@ -61,6 +62,7 @@ export class PriceGraphComponent implements OnInit {
   private y_axis;
   private context;
   private x2_axis;
+  private sub: Subscription;
 
   // general chart area helper variables
   private margin              = {top: 10, right: 10, bottom: 100, left: 40};
@@ -77,9 +79,15 @@ export class PriceGraphComponent implements OnInit {
     this.focus   = this.createFocus(this.svg);
     this.context = this.createContext(this.svg);
 
-    this.store.observe$
+    this.sub = this
+      .store
+      .observe$
       .filter(state => state.preparedResults.length > 0)
       .subscribe(state => this.renderChart(state.preparedResults))
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   renderChart(data) {

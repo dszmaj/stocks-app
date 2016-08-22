@@ -73,7 +73,7 @@ export class StoreService {
           preparedResults: prepareResults(payload)
         };
         this.data = Object.assign(this.data, temp);
-        return this.send(this.data);
+        return this.send();
       }
       case StoreActions.LOAD_SYMBOLS_TO_STORE: {
         let temp = {
@@ -81,21 +81,21 @@ export class StoreService {
         };
         action.payload.forEach(object => temp.allSymbols.push(object.Symbol));
         this.data = Object.assign(this.data, temp);
-        return this.send(this.data);
+        return this.send();
       }
       case StoreActions.SET_SELECTED: {
         let temp = {
           selectedSymbols: action.payload
         };
         this.data = Object.assign(this.data, temp);
-        return this.send(this.data);
+        return this.send();
       }
     }
   }
 
-  send(data: State) {
-    console.log('Application State: ', data);
-    this.store.next(data);
+  send() {
+    console.log('Application State: ', this.data);
+    this.store.next(this.data);
   }
 }
 
