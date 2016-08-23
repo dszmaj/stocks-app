@@ -7,10 +7,11 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import {
-  State,
-  StoreService
-} from '../shared/store.service';
-import { Observable, Subscription } from 'rxjs';
+  Observable,
+  Subscription
+} from 'rxjs';
+import * as _ from 'lodash';
+import { StoreService } from '../shared/store.service';
 
 @Component({
   selector: 'data-table-for-stock',
@@ -18,37 +19,23 @@ import { Observable, Subscription } from 'rxjs';
   template: `
   <div class="container">
     <div class="row">
-      <div #hot></div>
+      <div class="col-md-6 col-md-offset-3">
+        <div></div>
+      </div>
     </div>
   </div>
   `
 })
 export class DataTableForStockComponent implements AfterViewInit, OnDestroy {
-  private hot;
-  private data = [];
-  @ViewChild('hot') private container: ElementRef;
-  private sub: Subscription = this
+  private data = this
     .store
     .observe$
-    .filter(state => state.preparedResults.length > 0)
-    .subscribe(state => this.data = state.preparedResults);
+    .filter(state => state.preparedResults.length > 0);
 
   constructor(private store: StoreService) {}
 
-  ngAfterViewInit() {
-    this.hot = new Handsontable(this.container.nativeElement, {
-      data:       [
-        ["", "Ford", "Volvo", "Toyota", "Honda"],
-        ["2016", 10, 11, 12, 13],
-        ["2017", 20, 11, 14, 13],
-        ["2018", 30, 15, 12, 13]
-      ],
-      rowHeaders: true,
-      colHeaders: true
-    });
-  }
+  ngAfterViewInit() {}
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+  ngOnDestroy() {}
 }
+

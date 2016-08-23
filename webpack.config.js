@@ -114,22 +114,6 @@ module.exports = function makeWebpackConfig() {
         exclude: root('src', 'app'),
         loader: isTest ? 'null' : ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass')
       },
-      {
-        test: require.resolve('numbro'),
-        loader: 'expose?numbro'
-      },
-      {
-        test: require.resolve('moment'),
-        loader: 'expose?moment'
-      },
-      {
-        test:require.resolve('pikaday'),
-        loader:'expose?Pikaday'
-      },
-      {
-        test:require.resolve('zeroclipboard'),
-        loader:'expose?ZeroClipboard'
-      },
       // all css required in src/app files will be merged in js files
       {
         test: /\.scss$/,

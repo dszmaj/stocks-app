@@ -9,7 +9,7 @@ import { StoreActions } from './store.actions';
 
 
 export interface State {
-  preparedResults: PreparedForSymbol[],
+  preparedResults: Array<Prepared[]>,
   allSymbols:      string[],
   selectedSymbols: string[]
 }
@@ -25,15 +25,15 @@ interface RawDatapoint {
   Adj_Close: string
 }
 
-interface PreparedForSymbol {
+interface Prepared {
   Symbol:    string,
-  Date:      Date[],
-  Open:      number[],
-  High:      number[],
-  Low:       number[],
-  Close:     number[],
-  Volume:    number[],
-  Adj_Close: number[]
+  Date:      Date,
+  Open:      number,
+  High:      number,
+  Low:       number,
+  Close:     number,
+  Volume:    number,
+  Adj_Close: number
 }
 
 
@@ -77,7 +77,7 @@ export class StoreService {
       }
       case StoreActions.LOAD_SYMBOLS_TO_STORE: {
         let temp = {
-          allSymbols:         []
+          allSymbols: []
         };
         action.payload.forEach(object => temp.allSymbols.push(object.Symbol));
         this.data = Object.assign(this.data, temp);
@@ -103,7 +103,7 @@ export class StoreService {
 // what was meant to be RxJS showoff...
 // being able to use ngrx/store and ngrx/effects I would close that behaviour in series of (side)Effects
 // resulting in much cleaner and readable code
-function prepareResults(data: RawDatapoint[]): PreparedForSymbol[] {
+function prepareResults(data: RawDatapoint[]): Prepared[] {
   let finalData = [];
 
   // observable of all datapoints with values converted to proper type

@@ -18,12 +18,5 @@ import 'd3fc';
 import 'jquery';
 import 'bootstrap';
 
-// Handsontable
-import 'numbro';
-import 'moment';
-import 'pikaday';
-import 'zeroclipboard';
-import 'handsontable';
-
 // Utils
 import 'lodash';
