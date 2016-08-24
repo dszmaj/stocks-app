@@ -16,7 +16,6 @@ import 'd3fc';
 
 // jQuery
 import 'jquery';
-import 'bootstrap';
 
 // Utils
 import 'lodash';
