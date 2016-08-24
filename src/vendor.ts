@@ -14,8 +14,5 @@ import 'rxjs';
 import 'd3';
 import 'd3fc';
 
-// jQuery
-import 'jquery';
-
 // Utils
 import 'lodash';
