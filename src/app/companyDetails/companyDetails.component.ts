@@ -1,10 +1,17 @@
 import {
   Component,
-  ChangeDetectionStrategy, OnDestroy
+  OnDestroy,
+  ChangeDetectionStrategy
 } from '@angular/core';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
+import {
+  State,
+  StoreService
+} from '../shared/store.service';
 import * as _ from 'lodash';
-import { Observable, Subscription, Subscription } from 'rxjs';
-import { StoreService } from '../shared/store.service';
 
 @Component({
   selector: 'company-details',
@@ -49,10 +56,10 @@ import { StoreService } from '../shared/store.service';
 export class CompanyDetailsComponent implements OnDestroy {
   public _ = _; // lodash in templates
   public clickedIndex: number = 0;
-  private filter$: Observable = this
+  private filter$: Observable<State> = this
     .store
     .observe$
-    .filter(state => state.selected.length > 0);
+    .filter(state => state.selected.length > 0 && state.details.length > 0);
   public selected = [];
   private selected$: Subscription = this
     .filter$

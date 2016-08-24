@@ -41,7 +41,7 @@ export class FullListComponent implements OnInit {
     private utils: UtilsService
   ) {
     this.symbols = store.observe$
-      .map(state => state.allSymbols);
+      .map(state => state.symbols);
   }
 
   ngOnInit() {

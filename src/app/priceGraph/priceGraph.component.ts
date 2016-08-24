@@ -82,8 +82,8 @@ export class PriceGraphComponent implements OnInit, OnDestroy {
     this.sub = this
       .store
       .observe$
-      .filter(state => state.preparedResults.length > 0)
-      .subscribe(state => this.renderChart(state.preparedResults))
+      .filter(state => state.results.length > 0)
+      .subscribe(state => this.renderChart(state.results))
   }
 
   ngOnDestroy() {

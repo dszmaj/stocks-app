@@ -9,10 +9,10 @@ import { StoreActions } from './store.actions';
 
 
 export interface State {
-  preparedResults: Array<Prepared[]>,
-  allSymbols:      string[],
-  selected:        string[],
-  details:         Detail[]
+  results:  Array<Prepared[]>,
+  symbols:  string[],
+  selected: string[],
+  details:  Detail[]
 }
 
 interface Detail {}
@@ -43,16 +43,15 @@ interface Prepared {
 @Injectable()
 export class StoreService {
   private data: State = {
-    preparedResults: [],
-    allSymbols:      [],
-    selected:        [],
-    details:         []
+    results:  [],
+    symbols:  [],
+    selected: [],
+    details:  []
   };
   private store: BehaviorSubject<State> = new BehaviorSubject(this.data);
   public observe$: Observable<State> = this
     .store
-    .asObservable()
-    .share();
+    .asObservable();
 
   // unnecessary step, included only for need of more sophisticated store
   dispatch(action: Action) {
@@ -74,16 +73,16 @@ export class StoreService {
       case StoreActions.LOAD_DATA_TO_STORE: {
         let payload = action.payload.query.results.quote;
         let temp  = {
-          preparedResults: prepareResults(payload)
+          results: prepareResults(payload)
         };
         this.data = Object.assign(this.data, temp);
         return this.send();
       }
       case StoreActions.LOAD_SYMBOLS_TO_STORE: {
         let temp = {
-          allSymbols: []
+          symbols: []
         };
-        action.payload.forEach(object => temp.allSymbols.push(object.Symbol));
+        action.payload.forEach(object => temp.symbols.push(object.Symbol));
         this.data = Object.assign(this.data, temp);
         return this.send();
       }

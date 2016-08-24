@@ -3,9 +3,15 @@ import {
   OnDestroy,
   ChangeDetectionStrategy
 } from '@angular/core';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
+import {
+  State,
+  StoreService
+} from '../shared/store.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
-import { StoreService } from '../shared/store.service';
 
 @Component({
   selector: 'data-table-for-stock',
@@ -16,16 +22,18 @@ import { StoreService } from '../shared/store.service';
       <div class="col-md-8 col-md-offset-2">
         <!-- Nav tabs -->
         <ul 
-          class="nav nav-tabs" 
-          *ngIf="data.length > 0"
+          class="nav nav-tabs"
+          *ngIf="selected.length > 0"
         >
           <li
             [class.active]="clickedIndex === i"
-            *ngFor="let dataSet of data; let i = index"
+            *ngFor="let sel of selected; let i = index"
           >
             <a 
               (click)="clicked(i)"
-            ><strong>{{ _.first(dataSet).Symbol }}</strong></a>
+            >
+              <strong>{{ sel }}</strong>
+            </a>
           </li>
         </ul>
       
@@ -65,18 +73,30 @@ import { StoreService } from '../shared/store.service';
   `
 })
 export class DataTableForStockComponent implements OnDestroy {
-  _ = _; // making lodash accessible in templates
-  public data = []; // can't use async pipe subscribing to the same property in 2 places in template despite of multicasting
+  public _ = _; // making lodash accessible in templates
   public clickedIndex: number = 0;
-  private sub: Subscription = this.store.observe$
-    .map(state => state.preparedResults)
-    .filter(results => results.length > 0)
-    .subscribe(results => this.data = results);
+  private filter$: Observable<State> = this
+    .store
+    .observe$
+    .filter(state => state.selected.length > 0 && state.results.length > 0);
+  public selected = [];
+  private selected$: Subscription = this
+    .filter$
+    .map(state => state.selected)
+    .subscribe(selected => {
+      this.selected = selected});
+  public data = []; // can't use async pipe in root route component
+  private data$: Subscription = this
+    .filter$
+    .map(state => state.results)
+    .subscribe(data => {
+      this.data = data});
 
   constructor(private store: StoreService) {}
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.data$.unsubscribe();
+    this.selected$.unsubscribe();
   }
 
   clicked(index) {
