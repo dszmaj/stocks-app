@@ -11,8 +11,11 @@ import { StoreActions } from './store.actions';
 export interface State {
   preparedResults: Array<Prepared[]>,
   allSymbols:      string[],
-  selectedSymbols: string[]
+  selected:        string[],
+  details:         Detail[]
 }
+
+interface Detail {}
 
 interface RawDatapoint {
   Symbol:    string,
@@ -42,7 +45,8 @@ export class StoreService {
   private data: State = {
     preparedResults: [],
     allSymbols:      [],
-    selectedSymbols: []
+    selected:        [],
+    details:         []
   };
   private store: BehaviorSubject<State> = new BehaviorSubject(this.data);
   public observe$: Observable<State> = this
@@ -85,7 +89,7 @@ export class StoreService {
       }
       case StoreActions.SET_SELECTED: {
         let temp = {
-          selectedSymbols: action.payload
+          selected: action.payload
         };
         this.data = Object.assign(this.data, temp);
         return this.send();
