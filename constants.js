@@ -71,6 +71,7 @@ exports.MY_VENDOR_DLLS = [
   // this will speed up initial dev server build and incremental builds.
   // Be sure to run `npm run build:dll` if you make changes to this array.
   root('node_modules/d3'),
+  root('node_modules/lodash'),
 ];
 
 exports.MY_CLIENT_PLUGINS = [
