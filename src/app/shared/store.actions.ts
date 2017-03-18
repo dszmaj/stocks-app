@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import { Action } from './store.service';
 
 
 export class StoreActions {

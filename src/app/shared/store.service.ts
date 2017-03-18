@@ -3,10 +3,14 @@ import {
   BehaviorSubject,
 } from 'rxjs';
 import * as _ from 'lodash';
-import { Action } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { StoreActions } from './store.actions';
 
+
+export interface Action {
+  payload: any,
+  type:    string
+}
 
 export interface State {
   results:  Array<Prepared[]>,
