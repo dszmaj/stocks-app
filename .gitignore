@@ -1,3 +1,12 @@
+# cache
+/.awcache
+
+# DLL's
+/dll
+
+# Locks
+*.lock
+
 # Logs
 logs
 *.log

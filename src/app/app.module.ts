@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { RootComponent } from './app.component';
 
 import routes from './app.routes';
 
+import { RootComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { PriceGraphModule } from './priceGraph/priceGraph.module';

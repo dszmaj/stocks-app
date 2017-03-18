@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -20,7 +20,13 @@
   },
   "exclude": [
     "node_modules",
-    "compiled"
+    "compiled",
+    "e2e/**/*.ts",
+    "src/**/*.spec.ts",
+    "src/server.ts",
+    "src/main.browser.aot.ts",
+    "src/main.browser.universal.aot.ts",
+    "src/app/app.module.universal.node.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,

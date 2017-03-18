@@ -115,8 +115,8 @@ function prepareResults(data: RawDatapoint[]): Prepared[] {
 
   // observable of all datapoints with values converted to proper type
   let initial = Observable.from(data)
-    .map(datapoint => {
-      let temp       = Object.assign({}, datapoint);
+    .map((datapoint: RawDatapoint) => {
+      let temp: Prepared = Object.assign({});
       temp.Symbol    = datapoint.Symbol;
       temp.Date      = new Date(datapoint.Date);
       temp.Open      = parseFloat(datapoint.Open);
