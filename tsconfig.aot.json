@@ -1,19 +1,20 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "noEmitHelpers": true,
+    "pretty": false,
+    "sourceMap": true,
     "lib": [
       "es7",
       "dom"
     ],
-    "noEmitHelpers": true,
-    "skipDefaultLibCheck": true,
-    "pretty": true,
-    "sourceMap": true,
+    "noEmit": true,
     "strictNullChecks": false,
+    "skipDefaultLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ]
@@ -22,7 +23,13 @@
     "node_modules",
     "compiled",
     "e2e/**/*.ts",
+    "src/**/*.e2e.ts",
+    "src/**/*.spec.ts",
+    "src/server.ts",
+    "src/main.browser.aot.ts",
+    "src/main.browser.universal.ts",
     "src/main.browser.universal.aot.ts",
+    "src/app/app.module.universal.browser.ts",
     "src/app/app.module.universal.node.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
@@ -34,5 +41,9 @@
   "buildOnSave": false,
   "atom": {
     "rewriteTsconfig": false
+  },
+  "angularCompilerOptions": {
+    "genDir": "compiled",
+    "skipMetadataEmit": true
   }
 }
