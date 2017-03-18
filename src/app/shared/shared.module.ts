@@ -2,8 +2,12 @@ import {
   NgModule,
   ModuleWithProviders
 } from '@angular/core';
+import {
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+
 import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StoreService } from './store.service';
 import { UtilsService } from './utils.service';
@@ -13,11 +17,13 @@ import { UtilsService } from './utils.service';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule
   ],
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule
   ]
 })
