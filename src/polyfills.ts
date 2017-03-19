@@ -5,6 +5,8 @@ import 'zone.js/dist/zone';
 import 'ts-helpers';
 import 'web-animations-js';
 
+declare const process, require;
+
 if (process.env.ENV === 'build') {
   // Production
 

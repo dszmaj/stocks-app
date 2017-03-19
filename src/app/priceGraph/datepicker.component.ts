@@ -3,6 +3,9 @@ import {
   Component,
   ChangeDetectionStrategy
 } from '@angular/core';
+import { IMyOptions } from 'mydatepicker';
+import { FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'stock-datepicker',
@@ -31,8 +34,21 @@ import {
         </form>
 `
 })
-export class DatepickerComponent implements OnInit {
-  constructor() {}
+export class DatepickerComponent {
+  private myDatePickerOptions: IMyOptions = {
+    dateFormat: 'yyyy-mm-dd',
+    height: '34px',
+    width:  '210px',
+    inline: false
+  };
+  private model: Object = {
+    date: {year: 2018, month: 10, day: 9},
+    property1: true,
+    property2: 'testing...'
+  };
+  private form: FormGroup;
 
-  ngOnInit() {}
+  onSubmit() {
+    // todo
+  }
 }

@@ -49,7 +49,6 @@ import { StoreService, State } from '../shared/store.service';
   `
 })
 export class PriceGraphComponent implements OnInit, OnDestroy {
-  public _                               = _; // making lodash accessible in templates
   public clickedIndex: number            = 0;
   private filter$: Observable<State>     = this
     .store

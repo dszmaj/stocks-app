@@ -2,13 +2,11 @@ import {
   OnInit,
   Component,
   ChangeDetectionStrategy,
-  Input, ViewChild, ElementRef
+  Input,
+  ElementRef
 } from '@angular/core';
-
 import * as d3 from 'd3';
-import * as _ from 'lodash';
-import { Observable } from 'rxjs';
-import { StoreService } from '../shared/store.service';
+import { StoreService, Prepared } from '../shared/store.service';
 
 
 @Component({
@@ -19,11 +17,10 @@ import { StoreService } from '../shared/store.service';
     `.brush .extent {stroke: #fff; fill-opacity: .125; shape-rendering: crispEdges;}`
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<div class="{{ chart_data[0].Symbol }}" #element></div>`
+  template: ``
 })
 export class ChartComponent implements OnInit {
   @Input() public chart_data;
-  @ViewChild('element') element: ElementRef;
 
   private x;
   private y;
@@ -48,17 +45,20 @@ export class ChartComponent implements OnInit {
   private height: number      = 500 - this.margin.top - this.margin.bottom;
   private brushHeight: number = 500 - this.margin2.top - this.margin2.bottom;
 
-  constructor(private store: StoreService) {}
+  constructor(
+    private store: StoreService,
+    private element: ElementRef
+  ) {}
 
   ngOnInit() {
     this.renderChart(this.chart_data);
   }
 
-  renderChart(data) {
+  renderChart(data: Array<Prepared>) {
     this.svg     = this.createSVG();
-    this.defs    = this.createDefs(this.svg);
-    this.focus   = this.createFocus(this.svg);
-    this.context = this.createContext(this.svg);
+    this.defs    = this.createDefs();
+    this.focus   = this.createFocus();
+    this.context = this.createContext();
 
     let extent = () => d3.extent(data.map(d => d.Date)),
         min    = () => 0.95 * d3.min(data.map(d => d.Close)),
@@ -72,20 +72,20 @@ export class ChartComponent implements OnInit {
     this.createBrush();
   }
 
-  drawChartArea(data, symbol) {
+  drawChartArea(data: Array<Prepared>) {
     let color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16),
         style = `fill: ${color}; clip-path: url(#clip);`;
 
     this.area  = d3.area()
       .curve(d3.curveMonotoneX)
-      .x(d => this.x(d.Date))
+      .x((d: Prepared): number => this.x(d.Date))
       .y0(this.height)
-      .y1(d => this.y(d.Close));
+      .y1((d: Prepared): number => this.y(d.Close));
     this.area2 = d3.area()
       .curve(d3.curveMonotoneX)
-      .x(d => this.x2(d.Date))
+      .x((d: Prepared): number => this.x2(d.Date))
       .y0(this.brushHeight)
-      .y1(d => this.y2(d.Close));
+      .y1((d: Prepared): number => this.y2(d.Close));
 
     this.focus
       .append('path')
@@ -108,7 +108,7 @@ export class ChartComponent implements OnInit {
   }
 
   createBrush() {
-    this.brush = d3.brushX(this.x2)
+    this.brush = d3.brushX()
       .extent([[0, 0], [this.width, this.brushHeight]])
       .on("brush", () => {
         this.x.domain(
@@ -156,8 +156,8 @@ export class ChartComponent implements OnInit {
       .call(this.y_axis);
   }
 
-  createDefs(svg) {
-    return svg
+  createDefs() {
+    return this.svg
       .append('defs')
       .append('clipPath')
       .attr('id', 'clip')
@@ -166,15 +166,15 @@ export class ChartComponent implements OnInit {
       .attr('height', this.height);
   }
 
-  createFocus(svg) {
-    return svg
+  createFocus() {
+    return this.svg
       .append('g')
       .attr('class', 'focus')
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
   }
 
-  createContext(svg) {
-    return svg
+  createContext() {
+    return this.svg
       .append('g')
       .attr('class', 'context')
       .attr('transform', 'translate(' + this.margin2.left + ',' + this.margin2.top + ')');

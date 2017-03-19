@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES6",
     "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -8,9 +8,5 @@
     "noEmitHelpers": true
   },
   "compileOnSave": false,
-  "buildOnSave": false,
-  "files": [
-    "typings/index.d.ts",
-    "src/custom-typings.d.ts"
-  ]
+  "buildOnSave": false
 }
