@@ -5,8 +5,11 @@ import {
   Input,
   ElementRef
 } from '@angular/core';
+import {
+  StoreService,
+  Prepared
+} from '../shared/store.service';
 import * as d3 from 'd3';
-import { StoreService, Prepared } from '../shared/store.service';
 
 
 @Component({
