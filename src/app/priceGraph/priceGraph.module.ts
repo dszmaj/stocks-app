@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { PriceGraphComponent } from './priceGraph.component';
 import { FullListComponent } from './fullList.component';
+import { DatepickerComponent } from './datepicker.component';
+import { ChartComponent } from './chart.component';
 
 
 @NgModule({
@@ -10,11 +12,15 @@ import { FullListComponent } from './fullList.component';
   ],
   declarations: [
     PriceGraphComponent,
-    FullListComponent
+    FullListComponent,
+    DatepickerComponent,
+    ChartComponent
   ],
   exports: [
     PriceGraphComponent,
-    FullListComponent
+    FullListComponent,
+    DatepickerComponent,
+    ChartComponent
   ]
 })
 export class PriceGraphModule {}

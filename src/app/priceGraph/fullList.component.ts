@@ -45,11 +45,8 @@ export class FullListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // initial data for placeholder chart
     this.getSymbols(['CSCO']);
 
-    // hacked csv parsing
-    // normally I would create server endpoint that will download, parse, store and serve as JSON
     Observable
       .bindCallback(d3.csv)('nasdaq.csv')
       .subscribe(data => this.store.dispatch(StoreActions.loadSymbols(data[1])));
