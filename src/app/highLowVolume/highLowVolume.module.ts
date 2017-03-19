@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { HighLowVolumeComponent } from './highLowVolume.component';
+import { ChartComponent } from './chart.component';
 
 
 @NgModule({
@@ -8,10 +9,12 @@ import { HighLowVolumeComponent } from './highLowVolume.component';
     CommonModule
   ],
   declarations: [
-    HighLowVolumeComponent
+    HighLowVolumeComponent,
+    ChartComponent
   ],
   exports: [
-    HighLowVolumeComponent
+    HighLowVolumeComponent,
+    ChartComponent
   ]
 })
 export class HighLowVolumeModule {}
