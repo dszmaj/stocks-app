@@ -1,6 +1,7 @@
 import {
   OnInit,
   Component,
+  OnDestroy,
   ChangeDetectionStrategy
 } from '@angular/core';
 import {
@@ -52,7 +53,7 @@ import {
         </div>
 `
 })
-export class HighLowVolumeComponent implements OnInit {
+export class HighLowVolumeComponent implements OnInit, OnDestroy {
   public clickedIndex: number        = 0;
   private filter$: Observable<State> = this
     .store
@@ -74,6 +75,11 @@ export class HighLowVolumeComponent implements OnInit {
     });
 
   constructor(private store: StoreService) {}
+
+  ngOnDestroy() {
+    this.selected$.unsubscribe();
+    this.data$.unsubscribe();
+  }
 
   ngOnInit() {}
 
